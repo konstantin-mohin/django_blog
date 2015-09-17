@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{%for c in category%}{{ c.title }}{%endfor%}{% endblock %}
+
+{% block content %} 
+<h1 align="center" style="font-size:3em;">{%for c in category%}{{c.title}}</h1><br /><br />
+    <p>{{c.content|safe}}{%endfor%}</p><br /><br />
+    {%for a in articl%}
+        <article class="art">
+            <header>
+                        <a href="{%url art_inside a.category.slug_title a.slug_title%}"><h1>{{a.title}}</h1> </a>
+            </header>
+            <div class="body">
+                <div class="inner">
+                    <p>{{a.preview|safe}}</p>
+                    <p align="left"><a href="{%url art_inside a.category.slug_title a.slug_title%}">More</a></p>
+                </div>
+            </div>
+            <footer >
+                <div class="tags">
+                    Tags: {%for t in a.tags.all%} <a href="{%url tag t.slug_title%}">{{t.title}}</a>, {%endfor%}<br />
+                    Category: <a href="{%url category_inside a.category.slug_title%}">{{a.category}}</a>
+                </div>
+                <div class="right">
+                    <h1 class="commentcount"><a href="{%url art_inside a.category.slug_title a.slug_title%}">{{a.comment.count}} Response</a></h1>
+                </div>
+            </footer>
+        </article>   
+    {%endfor%}
+{% endblock %}
+{% block bar %}{% endblock %}

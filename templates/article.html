@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ art.title }}{% endblock %}
+{% block metakey %}{{ art.metakey }}{% endblock %}
+{% block metades %}{{ art.metades }}{% endblock %}
+
+{% block content %} 
+    <article class="art">
+        <header>
+            <h1>{{art.title}}</h1> 
+        </header>
+        <div class="body">
+            <div class="inner">
+                <p>{{art.content|safe}}</p>
+            </div>
+        </div><br />
+        <footer >
+            Posted {{art.pubdate}} by - {{art.author}}
+            <div class="tags">
+                            Tags: {%for t in art.tags.all%} <a href="{%url tag t.slug_title%}">{{t.title}}</a>, {%endfor%}
+            </div>
+            <div class="right">
+                                <h1 class="commentcount">{{art.comment.count}} Response</h1>
+            </div>
+         </footer>
+    </article>   
+                 
+    {%for c in art.comment.all%}
+        <div class="comments">
+            {%if c.title %} name: {{c.title}} 
+            {%else%}name:Anonim {%endif%}<br />
+            {%if c.site%} site: {{c.site}} <br />{%endif%}
+            {%if c.email%} email: {{c.email}} <br />{%endif%}
+            comment: {{c.content}} <br />
+        </div>
+   {%endfor%}
+                  
+    <div class="p_comment_form">
+        <h1>Leave a Comment</h1>
+        <form id="new_comment" class="new_comment clearfix" method="post" action="."> {% csrf_token %}
+            {% if user.is_authenticated %}
+                <div class="p_comment_section">
+                    <label for="comment_body">Comment:</label>
+                        <div class="p_comment_area">
+                                    <textarea id="comment_body" rows="5" name="comment" cols="40"></textarea>
+                        </div>
+                    <div  class="error" style="color:red;margin-bottom:5px;"></div>
+                </div>
+            {% else %}
+                <div class="p_additional_fields">
+                    <label for="comment_name">Name:</label>
+                        <input id="comment_name" type="text"  name="comname" class="mono" value="" size="40" maxlength="80"><br /> 
+                    <label for="comment_toast">Email:</label>
+                        <input id="comment_toast" type="text" size="40" name="comemail" class="mono"  maxlength="80"><br />
+                    <label for="comment_toast">Website:</label>
+                        <input id="comment_toast" type="text" size="40" name="comsite" class="mono"  maxlength="80"><br />                                    
+                </div>
+                <div class="p_comment_section">
+                    <label for="comment_body">Comment:</label>
+                    <div class="p_comment_area">
+                        <textarea id="comment_body" rows="5" name="comment" class="mono" cols="40"></textarea>
+                        <div  class="error" style="color:red;margin-bottom:5px;"></div>
+                    </div>
+                </div>
+            {%endif%}
+            <div class="p_comment_section">
+                <div class="p_submit">
+                    <button class=" action_button" button="true">
+                        <span class="">Post this Comment</span>
+                    </button>
+                 </div>
+            </div>
+        </form>
+         <div id="errmsg"></div>                     
+    </div>
+{% endblock %}	
+{% block bar %}{% endblock %}
